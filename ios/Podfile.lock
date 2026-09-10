@@ -1,0 +1,35 @@
+PODS:
+  - Flutter (1.0.0)
+  - isar_community_flutter_libs (1.0.0):
+    - Flutter
+  - on_audio_query_ios (0.0.1):
+    - Flutter
+    - SwiftyBeaver
+  - SwiftyBeaver (1.9.5)
+
+DEPENDENCIES:
+  - Flutter (from `Flutter`)
+  - isar_community_flutter_libs (from `.symlinks/plugins/isar_community_flutter_libs/ios`)
+  - on_audio_query_ios (from `.symlinks/plugins/on_audio_query_ios/ios`)
+
+SPEC REPOS:
+  trunk:
+    - SwiftyBeaver
+
+EXTERNAL SOURCES:
+  Flutter:
+    :path: Flutter
+  isar_community_flutter_libs:
+    :path: ".symlinks/plugins/isar_community_flutter_libs/ios"
+  on_audio_query_ios:
+    :path: ".symlinks/plugins/on_audio_query_ios/ios"
+
+SPEC CHECKSUMS:
+  Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
+  isar_community_flutter_libs: bede843185a61a05ff364a05c9b23209523f7e0d
+  on_audio_query_ios: 28a780e2d0d85d92d500ba6e12c6c8167022b2fa
+  SwiftyBeaver: 84069991dd5dca07d7069100985badaca7f0ce82
+
+PODFILE CHECKSUM: 3c63482e143d1b91d2d2560aee9fb04ecc74ac7e
+
+COCOAPODS: 1.16.2

@@ -15,7 +15,6 @@ class MediaLibraryRepositoryImpl implements MediaLibraryRepository {
   Future<Result<List<Song>>> scanMediaLibrary() async {
     try {
       final result = await _dataSource.scanMediaLibrary();
-
       final songs = result.map(SongMapper.fromMap).toList();
       return SuccessResult(songs);
     } on PermissionException catch (e, stackTrace) {

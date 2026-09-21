@@ -1,22 +1,10 @@
+import 'dart:typed_data';
+
+import 'package:cross_file/src/types/interface.dart';
 import 'package:drive_tunes/core/app_exceptions.dart';
-import 'package:drive_tunes/core/logger/app_logger.dart';
 import 'package:drive_tunes/features/library/data/datasources/file_picker_data_source.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-final class _FakeLogger implements AppLogger {
-  @override
-  void debug(String message, {Object? error, StackTrace? stackTrace}) {}
-
-  @override
-  void error(String message, {Object? error, StackTrace? stackTrace}) {}
-
-  @override
-  void info(String message, {Object? error, StackTrace? stackTrace}) {}
-
-  @override
-  void warning(String message, {Object? error, StackTrace? stackTrace}) {}
-}
 
 final class _FakePlatformFile extends PlatformFile {
   @override
@@ -28,35 +16,58 @@ final class _FakePlatformFile extends PlatformFile {
   _FakePlatformFile({required this.name, this.path});
 
   @override
-  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
+  Future<int> length() {
+    // TODO: implement length
+    throw UnimplementedError();
+  }
+
+  @override
+  int? lengthSync() {
+    // TODO: implement lengthSync
+    throw UnimplementedError();
+  }
+
+  @override
+  Stream<Uint8List> readAsByteStream() {
+    // TODO: implement readAsByteStream
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Uint8List> readAsBytes() {
+    // TODO: implement readAsBytes
+    throw UnimplementedError();
+  }
+
+  @override
+  // TODO: implement uri
+  Uri get uri => throw UnimplementedError();
+
+  @override
+  // TODO: implement xFile
+  XFile get xFile => throw UnimplementedError();
 }
 
 void main() {
   group('FilePickerDataSource', () {
-    late _FakeLogger logger;
-
-    setUp(() {
-      logger = _FakeLogger();
-    });
-
     test('should return mapped audio files when user selects files', () async {
       final dataSource = FilePickerDataSource(
-        logger: logger,
-        picker: ({
-          FileType type = FileType.custom,
-          List<String>? allowedExtensions,
-        }) async {
-          return [
-            _FakePlatformFile(
-              name: 'song1.mp3',
-              path: '/path/to/song1.mp3',
-            ),
-            _FakePlatformFile(
-              name: 'song2.m4a',
-              path: '/path/to/song2.m4a',
-            ),
-          ];
-        },
+        picker:
+            ({
+              FileType type = FileType.custom,
+              List<String>? allowedExtensions,
+            }) async {
+              return [
+                _FakePlatformFile(
+                  name: 'song1.mp3',
+                  path: '/path/to/song1.mp3',
+                ),
+                _FakePlatformFile(
+                  name: 'song2.m4a',
+                  path: '/path/to/song2.m4a',
+                ),
+              ];
+            },
       );
 
       final result = await dataSource.scanMediaLibrary();
@@ -71,13 +82,13 @@ void main() {
 
     test('should return empty list when user cancels picker', () async {
       final dataSource = FilePickerDataSource(
-        logger: logger,
-        picker: ({
-          FileType type = FileType.custom,
-          List<String>? allowedExtensions,
-        }) async {
-          return null;
-        },
+        picker:
+            ({
+              FileType type = FileType.custom,
+              List<String>? allowedExtensions,
+            }) async {
+              return null;
+            },
       );
 
       final result = await dataSource.scanMediaLibrary();
@@ -85,21 +96,24 @@ void main() {
       expect(result, isEmpty);
     });
 
-    test('should rethrow FileSystemException when picker throws exception', () async {
-      final dataSource = FilePickerDataSource(
-        logger: logger,
-        picker: ({
-          FileType type = FileType.custom,
-          List<String>? allowedExtensions,
-        }) async {
-          throw Exception('Picker error');
-        },
-      );
+    test(
+      'should rethrow FileSystemException when picker throws exception',
+      () async {
+        final dataSource = FilePickerDataSource(
+          picker:
+              ({
+                FileType type = FileType.custom,
+                List<String>? allowedExtensions,
+              }) async {
+                throw Exception('Picker error');
+              },
+        );
 
-      expect(
-        () => dataSource.scanMediaLibrary(),
-        throwsA(isA<FileSystemException>()),
-      );
-    });
+        expect(
+          () => dataSource.scanMediaLibrary(),
+          throwsA(isA<FileSystemException>()),
+        );
+      },
+    );
   });
 }

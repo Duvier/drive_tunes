@@ -1,3 +1,5 @@
+import 'package:get_it/get_it.dart';
+
 import 'package:drive_tunes/core/database/isar_database_impl.dart';
 import 'package:drive_tunes/core/logger/app_logger.dart';
 import 'package:drive_tunes/features/library/data/datasources/datasource_abstracts.dart';
@@ -10,9 +12,6 @@ import 'package:drive_tunes/features/library/domain/repositories/media_library_r
 import 'package:drive_tunes/features/library/domain/services/library_synchronizer_service.dart';
 import 'package:drive_tunes/features/library/domain/usecases/get_songs_use_case.dart';
 import 'package:drive_tunes/features/library/domain/usecases/synchronize_library_use_case.dart';
-import 'package:drive_tunes/features/settings/domain/usecases/check_permission_use_case.dart';
-import 'package:drive_tunes/features/settings/domain/usecases/request_permission_use_case.dart';
-import 'package:get_it/get_it.dart';
 
 void registerLibraryDependencies(GetIt serviceContainer) {
   serviceContainer.registerFactory<LibraryDatasource>(
@@ -49,13 +48,5 @@ void registerLibraryDependencies(GetIt serviceContainer) {
       librarySynchronizer: serviceContainer(),
       logger: serviceContainer<AppLogger>(),
     ),
-  );
-
-  serviceContainer.registerFactory<CheckPermissionUseCase>(
-    () => CheckPermissionUseCase(repository: serviceContainer()),
-  );
-
-  serviceContainer.registerFactory<RequestPermissionUseCase>(
-    () => RequestPermissionUseCase(repository: serviceContainer()),
   );
 }

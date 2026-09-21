@@ -5,7 +5,7 @@ import 'package:permission_handler/permission_handler.dart';
 abstract class PermissionsDataSource {
   Future<AppAccess> checkPermission();
   Future<AppAccess> requestPermission();
-  Future<void> openAppSettings();
+  Future<void> openSettings();
 }
 
 final class PermissionsDataSourceImpl implements PermissionsDataSource {
@@ -36,7 +36,7 @@ final class PermissionsDataSourceImpl implements PermissionsDataSource {
   }
 
   @override
-  Future<void> openAppSettings() async {
+  Future<void> openSettings() async {
     try {
       await openAppSettings();
     } catch (e, stackTrace) {

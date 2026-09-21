@@ -2,7 +2,8 @@ import 'package:flutter/foundation.dart';
 
 import 'package:drive_tunes/core/database/isar_database_impl.dart';
 import 'package:drive_tunes/core/dependency_injector.dart';
-import 'package:drive_tunes/core/logger/app_logger.dart';
+import 'package:drive_tunes/core/errors/ui_error_bus.dart';
+import 'package:drive_tunes/core/telemetry/app_telemetry_service.dart';
 
 final class AppInitializer {
   const AppInitializer();
@@ -11,24 +12,17 @@ final class AppInitializer {
     await registerDependencies();
     await serviceContainer<IsarDatabase>().initialize();
 
-    final logger = serviceContainer<AppLogger>();
+    serviceContainer<AppTelemetryService>().initialize();
+
+    final uiErrorBus = serviceContainer<UiErrorBus>();
 
     FlutterError.onError = (details) {
-      logger.error(
-        'Flutter framework error',
-        error: details.exception,
-        stackTrace: details.stack,
-      );
+      uiErrorBus.emitMapped(details.exception, stackTrace: details.stack);
     };
 
     PlatformDispatcher.instance.onError = (error, stackTrace) {
-      logger.error(
-        'Unhandled platform error',
-        error: error,
-        stackTrace: stackTrace,
-      );
+      uiErrorBus.emitMapped(error, stackTrace: stackTrace);
       return true;
     };
   }
 }
-

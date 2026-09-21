@@ -8,22 +8,25 @@ final class SynchronizeLibraryUseCase {
   final MediaLibraryRepository mediaLibraryRepository;
   final LibraryRepository libraryRepository;
   final LibrarySynchronizerService librarySynchronizer;
-  final AppLogger? _logger;
+  final AppLogger? logger;
 
   const SynchronizeLibraryUseCase({
     required this.mediaLibraryRepository,
     required this.libraryRepository,
     required this.librarySynchronizer,
-    this._logger,
+    this.logger,
   });
 
   Future<Result<void>> call() async {
-    _logger?.info('Starting library synchronization');
+    logger?.info('Starting library synchronization');
 
     final resultScan = await mediaLibraryRepository.scanMediaLibrary();
 
-    if (resultScan case FailureResult(failure: final f, stackTrace: final st)) {
-      return FailureResult(f, stackTrace: st);
+    if (resultScan case FailureResult(
+      failure: final failure,
+      stackTrace: final stackTrace,
+    )) {
+      return FailureResult(failure, stackTrace: stackTrace);
     }
 
     final scannedSongs = (resultScan as SuccessResult).data;
@@ -31,10 +34,10 @@ final class SynchronizeLibraryUseCase {
     final resultStored = await libraryRepository.getSongs();
 
     if (resultStored case FailureResult(
-      failure: final f,
-      stackTrace: final st,
+      failure: final failure,
+      stackTrace: final stackTrace,
     )) {
-      return FailureResult(f, stackTrace: st);
+      return FailureResult(failure, stackTrace: stackTrace);
     }
 
     final librarySongs = (resultStored as SuccessResult).data;
@@ -47,7 +50,7 @@ final class SynchronizeLibraryUseCase {
     final syncResult = await libraryRepository.synchronize(changes);
 
     if (syncResult is SuccessResult) {
-      _logger?.info(
+      logger?.info(
         'Library synchronization completed: ${scannedSongs.length} scanned songs',
       );
     }

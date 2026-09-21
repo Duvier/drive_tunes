@@ -39,7 +39,7 @@ final class MediaLibraryPermissionRepositoryImpl
   @override
   Future<Result<void>> openAppSettings() async {
     try {
-      await dataSource.openAppSettings();
+      await dataSource.openSettings();
       return SuccessResult(null);
     } catch (e, stackTrace) {
       return FailureResult(PermissionFailure(), stackTrace: stackTrace);

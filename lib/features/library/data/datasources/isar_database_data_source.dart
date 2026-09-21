@@ -123,7 +123,9 @@ final class IsarDatabaseDatasource implements LibraryDatasource {
         await _isarInstance.songEntitys.putAll(
           changes.newSongs.map(SongEntity.fromDomain).toList(),
         );
-        await _isarInstance.songEntitys.deleteAll(changes.deletedSongIds);
+        await _isarInstance.songEntitys.deleteAllBySongId(
+          changes.deletedSongIds,
+        );
       });
     } catch (e, stackTrace) {
       logger.error(

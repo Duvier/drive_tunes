@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'package:drive_tunes/features/library/presentation/providers/library_provider.dart';
-import 'package:drive_tunes/core/app_failures.dart';
 
 class LibraryPage extends ConsumerWidget {
   const LibraryPage({super.key});
@@ -13,10 +12,14 @@ class LibraryPage extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Biblioteca'),
+        backgroundColor: Colors.deepPurple,
+        title: const Text(
+          'Biblioteca',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+        ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.refresh),
+            icon: const Icon(Icons.refresh, color: Colors.white),
             onPressed: () {
               final libraryNotifier = ref.read(libraryProvider.notifier);
               libraryNotifier.synchronize();
@@ -25,31 +28,23 @@ class LibraryPage extends ConsumerWidget {
         ],
       ),
       body: libraryState.when(
+        skipError: true,
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, stackTrace) {
-          return switch (error) {
-            PermissionFailure() => const Center(
-              child: Text('Permisos denegados'),
-            ),
-            FileSystemFailure() => const Center(
-              child: Text('Error al acceder a los archivos'),
-            ),
-            SynchronizationFailure() => const Center(
-              child: Text(
-                'Error al sincronizar la biblioteca de música del dispositivo',
-              ),
-            ),
-            UnknownFailure(message: final message) => Center(
-              child: Text(message),
-            ),
-            _ => const Center(child: Text('Error desconocido')),
-          };
-        },
+        error: (error, stackTrace) => SizedBox.shrink(),
         data: (songs) => ListView.builder(
           itemCount: songs.length,
           itemBuilder: (_, index) {
             final song = songs[index];
-            return ListTile(title: Text(song.title));
+            return ListTile(
+              leading: CircleAvatar(
+                child: Text(song.title.substring(0, 1).toUpperCase()),
+              ),
+              title: Text(song.title),
+              trailing: IconButton(
+                icon: Icon(Icons.play_circle_fill),
+                onPressed: null,
+              ),
+            );
           },
         ),
       ),

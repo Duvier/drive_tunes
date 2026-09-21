@@ -29,7 +29,7 @@ final class FilePickerDataSource implements MediaLibraryDatasource {
     try {
       final files = await _picker(
         type: FileType.custom,
-        allowedExtensions: ['mp3', 'm4a', 'wav', 'flac'],
+        allowedExtensions: ['mp3'],
       );
 
       if (files == null || files.isEmpty) {

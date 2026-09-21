@@ -74,7 +74,7 @@ void main() {
     );
 
     test('should return FailureResult when repository fails', () async {
-      final failure = UnknownFailure(message: 'Test failure');
+      final failure = UnknownFailure();
       repository.resultToReturn = FailureResult(failure);
 
       final result = await useCase();

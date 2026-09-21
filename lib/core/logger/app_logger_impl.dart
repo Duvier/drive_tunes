@@ -11,8 +11,14 @@ final class AppLoggerImpl implements AppLogger {
   }
 
   @override
-  void info(String message) {
+  void info(String message, {Object? error, StackTrace? stackTrace}) {
     debugPrint('[INFO] $message');
+    if (error != null) {
+      debugPrint('Error: $error');
+    }
+    if (stackTrace != null) {
+      debugPrint('StackTrace:\n$stackTrace');
+    }
   }
 
   @override

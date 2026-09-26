@@ -17,25 +17,25 @@ final libraryProvider = AsyncNotifierProvider<LibraryNotifier, List<Song>>(
 );
 
 final class LibraryNotifier extends AsyncNotifier<List<Song>> {
-  final GetSongsUseCase _getSongsUseCase;
-  final SynchronizeLibraryUseCase _synchronizeLibraryUseCase;
-  final UiErrorBus _uiErrorBus;
+  final GetSongsUseCase getSongsUseCase;
+  final SynchronizeLibraryUseCase synchronizeLibraryUseCase;
+  final UiErrorBus uiErrorBus;
 
   LibraryNotifier({
-    required this._getSongsUseCase,
-    required this._synchronizeLibraryUseCase,
-    required this._uiErrorBus,
+    required this.getSongsUseCase,
+    required this.synchronizeLibraryUseCase,
+    required this.uiErrorBus,
   });
 
   @override
   Future<List<Song>> build() async {
-    final result = await _getSongsUseCase();
+    final result = await getSongsUseCase();
     switch (result) {
       case SuccessResult(data: final songs):
         return songs;
 
       case FailureResult(failure: final failure, stackTrace: final stackTrace):
-        _uiErrorBus.emitMapped(
+        uiErrorBus.emitMapped(
           failure,
           stackTrace: stackTrace,
           feature: 'library',
@@ -48,14 +48,14 @@ final class LibraryNotifier extends AsyncNotifier<List<Song>> {
 
   Future<void> synchronize() async {
     try {
-      final syncResult = await _synchronizeLibraryUseCase();
+      final syncResult = await synchronizeLibraryUseCase();
       syncResult as int;
       switch (syncResult) {
         case FailureResult(
           failure: final failure,
           stackTrace: final stackTrace,
         ):
-          _uiErrorBus.emitMapped(
+          uiErrorBus.emitMapped(
             failure,
             stackTrace: stackTrace,
             feature: 'library',
@@ -66,7 +66,7 @@ final class LibraryNotifier extends AsyncNotifier<List<Song>> {
           ref.invalidateSelf();
       }
     } catch (e, stackTrace) {
-      _uiErrorBus.emitMapped(
+      uiErrorBus.emitMapped(
         e,
         stackTrace: stackTrace,
         feature: 'library',

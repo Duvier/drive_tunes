@@ -6,13 +6,13 @@ import 'package:drive_tunes/features/library/domain/repositories/library_reposit
 import 'package:drive_tunes/features/library/domain/value_objects/synchronization_result_value_object.dart';
 
 class LibraryRepositoryImpl implements LibraryRepository {
-  final LibraryDatasource _dataSource;
-  LibraryRepositoryImpl({required this._dataSource});
+  final LibraryDatasource dataSource;
+  LibraryRepositoryImpl({required this.dataSource});
 
   @override
   Future<Result<void>> saveSongs(List<Song> songs) async {
     try {
-      await _dataSource.saveSongs(songs);
+      await dataSource.saveSongs(songs);
       return SuccessResult(null);
     } catch (e, stackTrace) {
       return FailureResult(UnknownFailure(cause: e), stackTrace: stackTrace);
@@ -22,7 +22,7 @@ class LibraryRepositoryImpl implements LibraryRepository {
   @override
   Future<Result<List<Song>>> getSongs() async {
     try {
-      final result = await _dataSource.getSongs();
+      final result = await dataSource.getSongs();
       return SuccessResult(result);
     } catch (e, stackTrace) {
       return FailureResult(UnknownFailure(cause: e), stackTrace: stackTrace);
@@ -32,7 +32,7 @@ class LibraryRepositoryImpl implements LibraryRepository {
   @override
   Future<Result<void>> deleteSongs(List<String> ids) async {
     try {
-      await _dataSource.deleteSongs(ids);
+      await dataSource.deleteSongs(ids);
       return SuccessResult(null);
     } catch (e, stackTrace) {
       return FailureResult(UnknownFailure(cause: e), stackTrace: stackTrace);
@@ -42,7 +42,7 @@ class LibraryRepositoryImpl implements LibraryRepository {
   @override
   Future<Result<Song?>> getSong(String id) async {
     try {
-      final result = await _dataSource.getSong(id);
+      final result = await dataSource.getSong(id);
       return SuccessResult(result);
     } catch (e, stackTrace) {
       return FailureResult(UnknownFailure(cause: e), stackTrace: stackTrace);
@@ -52,7 +52,7 @@ class LibraryRepositoryImpl implements LibraryRepository {
   @override
   Future<Result<List<Song>>> searchSong(String query) async {
     try {
-      final result = await _dataSource.searchSong(query);
+      final result = await dataSource.searchSong(query);
       return SuccessResult(result);
     } catch (e, stackTrace) {
       return FailureResult(UnknownFailure(cause: e), stackTrace: stackTrace);
@@ -64,7 +64,7 @@ class LibraryRepositoryImpl implements LibraryRepository {
     SynchronizationResultValueObject changes,
   ) async {
     try {
-      await _dataSource.synchronize(changes);
+      await dataSource.synchronize(changes);
       return SuccessResult(null);
     } catch (e, stackTrace) {
       return FailureResult(UnknownFailure(cause: e), stackTrace: stackTrace);

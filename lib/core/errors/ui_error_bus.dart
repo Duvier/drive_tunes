@@ -23,11 +23,11 @@ abstract class UiErrorBus {
 }
 
 class UiErrorBusImpl implements UiErrorBus {
-  final UiErrorMapper _mapper;
+  final UiErrorMapper mapper;
   final StreamController<UiError> _controller =
       StreamController<UiError>.broadcast();
 
-  UiErrorBusImpl({required this._mapper});
+  UiErrorBusImpl({required this.mapper});
 
   @override
   Stream<UiError> get stream => _controller.stream;
@@ -52,7 +52,7 @@ class UiErrorBusImpl implements UiErrorBus {
     VoidCallback? action,
     UiErrorSeverity? severity,
   }) {
-    final uiError = _mapper.map(
+    final uiError = mapper.map(
       error,
       stackTrace: stackTrace,
       feature: feature,

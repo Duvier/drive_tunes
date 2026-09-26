@@ -7,14 +7,14 @@ import 'package:drive_tunes/features/library/data/mappers/song_mapper.dart';
 import 'package:drive_tunes/features/library/domain/repositories/media_library_repository.dart';
 
 class MediaLibraryRepositoryImpl implements MediaLibraryRepository {
-  final MediaLibraryDatasource _dataSource;
+  final MediaLibraryDatasource dataSource;
 
-  MediaLibraryRepositoryImpl({required this._dataSource});
+  MediaLibraryRepositoryImpl({required this.dataSource});
 
   @override
   Future<Result<List<Song>>> scanMediaLibrary() async {
     try {
-      final result = await _dataSource.scanMediaLibrary();
+      final result = await dataSource.scanMediaLibrary();
       final songs = result.map(SongMapper.fromMap).toList();
       return SuccessResult(songs);
     } on PermissionException catch (e, stackTrace) {

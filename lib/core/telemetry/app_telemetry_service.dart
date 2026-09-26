@@ -10,16 +10,16 @@ abstract class AppTelemetryService {
 }
 
 class AppTelemetryServiceImpl implements AppTelemetryService {
-  final UiErrorBus _errorBus;
-  final AppLogger _logger;
+  final UiErrorBus errorBus;
+  final AppLogger logger;
   StreamSubscription<UiError>? _subscription;
 
-  AppTelemetryServiceImpl({required this._errorBus, required this._logger});
+  AppTelemetryServiceImpl({required this.errorBus, required this.logger});
 
   @override
   void initialize() {
     _subscription?.cancel();
-    _subscription = _errorBus.stream.listen(_onUiErrorEmitted);
+    _subscription = errorBus.stream.listen(_onUiErrorEmitted);
   }
 
   void _onUiErrorEmitted(UiError error) {
@@ -28,14 +28,14 @@ class AppTelemetryServiceImpl implements AppTelemetryService {
 
     switch (error.severity) {
       case UiErrorSeverity.info:
-        _logger.info(
+        logger.info(
           logMessage,
           error: error.originalError,
           stackTrace: error.stackTrace,
         );
         break;
       case UiErrorSeverity.warning:
-        _logger.warning(
+        logger.warning(
           logMessage,
           error: error.originalError,
           stackTrace: error.stackTrace,
@@ -43,7 +43,7 @@ class AppTelemetryServiceImpl implements AppTelemetryService {
         break;
       case UiErrorSeverity.error:
       case UiErrorSeverity.critical:
-        _logger.error(
+        logger.error(
           logMessage,
           error: error.originalError,
           stackTrace: error.stackTrace,
